@@ -1,0 +1,14 @@
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+
+coverage
+dist
+node_modules
+*.db
+*.local
+
+# Miscellaneous
+.DS_Store
+.idea
+.vscode
