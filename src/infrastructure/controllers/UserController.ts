@@ -1,9 +1,10 @@
 import type { UserInput } from '@/core/interfaces/UserInput';
-import CreateUser from '@/core/services/CreateUser';
-import DeleteUser from '@/core/services/DeleteUser';
-import GetAllUsers from '@/core/services/GetAllUsers';
-import GetOneUser from '@/core/services/GetOneUser';
-import UpdateUser from '@/core/services/UpdateUser';
+import CreateUser from '@/core/use-cases/CreateUser';
+import DeleteUser from '@/core/use-cases/DeleteUser';
+import GetAllUsers from '@/core/use-cases/GetAllUsers';
+import GetOneUser from '@/core/use-cases/GetOneUser';
+import UpdateUser from '@/core/use-cases/UpdateUser';
+import ControllerAdvice from '../exceptions/ControllerAdvice';
 import type { ApplicationRequest } from '../providers/ApplicationRequest';
 import type { ApplicationResponse } from '../providers/ApplicationResponse';
 import UserRouter from '../routes/UserRouter';
@@ -56,10 +57,8 @@ class UserController {
     const result = await this.getOneUser.execute(id);
 
     if (result.isLeft()) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = result.error.statusCode;
-      response.end(JSON.stringify({ message: result.error.message }));
-      return;
+      const errorHandler = ControllerAdvice.handleException(request, response);
+      return errorHandler(result.error);
     }
 
     response.setHeader('Content-Type', 'application/json');
@@ -73,10 +72,8 @@ class UserController {
     const result = await this.createUser.execute(body);
 
     if (result.isLeft()) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = result.error.statusCode;
-      response.end(JSON.stringify({ message: result.error.message }));
-      return;
+      const errorHandler = ControllerAdvice.handleException(request, response);
+      return errorHandler(result.error);
     }
 
     response.setHeader('Content-Type', 'application/json');
@@ -104,10 +101,8 @@ class UserController {
     const result = await this.updateUser.execute(id, body);
 
     if (result.isLeft()) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = result.error.statusCode;
-      response.end(JSON.stringify({ message: result.error.message }));
-      return;
+      const errorHandler = ControllerAdvice.handleException(request, response);
+      return errorHandler(result.error);
     }
 
     response.statusCode = 200;
@@ -133,10 +128,8 @@ class UserController {
     const result = await this.deleteUser.execute(id);
 
     if (result.isLeft()) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = result.error.statusCode;
-      response.end(JSON.stringify({ message: result.error.message }));
-      return;
+      const errorHandler = ControllerAdvice.handleException(request, response);
+      return errorHandler(result.error);
     }
 
     response.statusCode = 204;

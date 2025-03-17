@@ -1,14 +1,13 @@
 import UserBuilder from '@/core/domain/UserBuilder';
 import type { Left, Right } from '@/core/exceptions/Either';
-import type { StatusError } from '@/core/exceptions/StatusError';
-import type { UserOutput } from '@/core/interfaces/UserOutput';
+import { UserNotFoundError } from '@/core/exceptions/UserNotFoundError';
 import type { UserRepository } from '@/core/interfaces/UserRepositoryPort';
-import UpdateUser from '@/core/services/UpdateUser';
+import DeleteUser from '@/core/use-cases/DeleteUser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-describe('UpdateUser', () => {
+describe('DeleteUser', () => {
   let repository: UserRepository;
-  let useCase: UpdateUser;
+  let useCase: DeleteUser;
 
   beforeEach(() => {
     repository = {
@@ -18,34 +17,30 @@ describe('UpdateUser', () => {
       update: vi.fn(),
       delete: vi.fn()
     };
-    useCase = new UpdateUser(repository);
+    useCase = new DeleteUser(repository);
   });
 
   it('should returns left error', async () => {
-    const userInput = { firstName: 'John', lastName: 'Doe', email: 'john.doe@pm.me' };
-
     repository.findById = vi.fn().mockResolvedValue(null);
-    const result = await useCase.execute('82p47nrr', userInput);
+    const result = await useCase.execute('82p47nrr');
 
     expect(result.isLeft()).toBe(true);
-    expect((result as Left<StatusError>).error.statusCode).toEqual(404);
+    expect((result as Left<Error>).error).toBeInstanceOf(UserNotFoundError);
   });
 
   it('should returns right value', async () => {
-    const userInput = { firstName: 'John', lastName: 'Doe', email: 'john.doe@pm.me' };
     const user = new UserBuilder()
       .withId('82p47nrr')
       .withFirstName('John')
       .withLastName('Doe')
       .withEmail('john.doe@pm.me')
       .build();
-    const userOutput = { id: '82p47nrr', fullName: 'John Doe', email: 'john.doe@pm.me' };
 
     repository.findById = vi.fn().mockResolvedValue(user);
-    repository.update = vi.fn().mockResolvedValue(user);
-    const result = await useCase.execute('82p47nrr', userInput);
+    repository.delete = vi.fn().mockResolvedValue(1);
+    const result = await useCase.execute('82p47nrr');
 
     expect(result.isRight()).toBe(true);
-    expect((result as Right<UserOutput>).value).toEqual(userOutput);
+    expect((result as Right<number>).value).toEqual(1);
   });
 });

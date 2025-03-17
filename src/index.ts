@@ -1,9 +1,9 @@
 import { createServer } from 'node:http';
-import CreateUser from './core/services/CreateUser';
-import DeleteUser from './core/services/DeleteUser';
-import GetAllUsers from './core/services/GetAllUsers';
-import GetOneUser from './core/services/GetOneUser';
-import UpdateUser from './core/services/UpdateUser';
+import CreateUser from './core/use-cases/CreateUser';
+import DeleteUser from './core/use-cases/DeleteUser';
+import GetAllUsers from './core/use-cases/GetAllUsers';
+import GetOneUser from './core/use-cases/GetOneUser';
+import UpdateUser from './core/use-cases/UpdateUser';
 // import InMemoryUserRepository from './infrastructure/adapters/InMemoryUserRepository';
 import { DatabaseSync } from 'node:sqlite';
 import UserRepositoryAdapter from './infrastructure/adapters/UserRepositoryAdapter';

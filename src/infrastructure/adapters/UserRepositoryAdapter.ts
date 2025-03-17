@@ -1,6 +1,6 @@
 import User from '@/core/domain/User';
-import { fromEntity } from '@/core/domain/UserMapper';
 import type { UserRepository } from '@/core/interfaces/UserRepositoryPort';
+import { fromEntity } from '../persistence/UserEntity';
 import type UserManagement from '../persistence/UserManagement';
 
 class UserRepositoryAdapter implements UserRepository {

@@ -1,6 +1,7 @@
 import { fromDomain, toDomain } from '../domain/UserMapper';
 import { Left, Right, type Either } from '../exceptions/Either';
-import { StatusError } from '../exceptions/StatusError';
+import { UserConflictError } from '../exceptions/UserConflictError';
+import { UserNotFoundError } from '../exceptions/UserNotFoundError';
 import type { UserInput } from '../interfaces/UserInput';
 import type { UserOutput } from '../interfaces/UserOutput';
 import type { UserRepository } from '../interfaces/UserRepositoryPort';
@@ -8,12 +9,12 @@ import type { UserRepository } from '../interfaces/UserRepositoryPort';
 class UpdateUser {
   constructor(private userRepository: UserRepository) {}
 
-  async execute(id: string, userInput: UserInput): Promise<Either<StatusError, UserOutput>> {
+  async execute(id: string, userInput: UserInput): Promise<Either<UserNotFoundError | UserConflictError, UserOutput>> {
     try {
       const existingUser = await this.userRepository.findById(id);
       if (existingUser === null) {
-        const statusError = new StatusError('User Not Found', 404);
-        return Left.create(statusError);
+        const userError = new UserNotFoundError(id);
+        return Left.create(userError);
       }
 
       const user = toDomain(userInput);
@@ -21,8 +22,8 @@ class UpdateUser {
       const updatedUser = await this.userRepository.update(user).then(fromDomain);
       return Right.create(updatedUser);
     } catch (err) {
-      const statusError = new StatusError((err as Error).message, 500);
-      return Left.create(statusError);
+      const userError = new UserConflictError(id);
+      return Left.create(userError);
     }
   }
 }

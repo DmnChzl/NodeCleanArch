@@ -1,8 +1,9 @@
 import UserBuilder from '@/core/domain/UserBuilder';
 import type { Left, Right } from '@/core/exceptions/Either';
+import { UserConflictError } from '@/core/exceptions/UserConflictError';
 import type { UserOutput } from '@/core/interfaces/UserOutput';
 import type { UserRepository } from '@/core/interfaces/UserRepositoryPort';
-import CreateUser from '@/core/services/CreateUser';
+import CreateUser from '@/core/use-cases/CreateUser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('CreateUser', () => {
@@ -28,7 +29,7 @@ describe('CreateUser', () => {
     const result = await useCase.execute(userInput);
 
     expect(result.isLeft()).toBe(true);
-    expect((result as Left<Error>).error.message).toEqual(errorMessage);
+    expect((result as Left<Error>).error).toBeInstanceOf(UserConflictError);
   });
 
   it('should returns right value', async () => {

@@ -1,9 +1,9 @@
 import UserBuilder from '@/core/domain/UserBuilder';
 import type { Left, Right } from '@/core/exceptions/Either';
-import type { StatusError } from '@/core/exceptions/StatusError';
+import { UserNotFoundError } from '@/core/exceptions/UserNotFoundError';
 import type { UserOutput } from '@/core/interfaces/UserOutput';
 import type { UserRepository } from '@/core/interfaces/UserRepositoryPort';
-import GetOneUser from '@/core/services/GetOneUser';
+import GetOneUser from '@/core/use-cases/GetOneUser';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('GetOneUser', () => {
@@ -26,7 +26,7 @@ describe('GetOneUser', () => {
     const result = await useCase.execute('82p47nrr');
 
     expect(result.isLeft()).toBe(true);
-    expect((result as Left<StatusError>).error.statusCode).toEqual(404);
+    expect((result as Left<Error>).error).toBeInstanceOf(UserNotFoundError);
   });
 
   it('should returns right value', async () => {
