@@ -16,7 +16,7 @@ class HelloRouter implements ApplicationRouter {
     const strictPathName = new RegExp(`^${HelloRouter.PATHNAME}$`);
 
     if (request.method === RequestMethod.Get && strictPathName.test(url.pathname)) {
-      return this.helloController.message(request, response);
+      return this.helloController.greeting(request, response);
     }
   }
 }

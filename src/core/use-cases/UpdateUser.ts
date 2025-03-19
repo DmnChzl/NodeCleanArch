@@ -1,5 +1,6 @@
 import { fromDomain, toDomain } from '../domain/UserMapper';
 import { Left, Right, type Either } from '../exceptions/Either';
+import { GenericUserError } from '../exceptions/GenericUserError';
 import { UserConflictError } from '../exceptions/UserConflictError';
 import { UserNotFoundError } from '../exceptions/UserNotFoundError';
 import type { UserInput } from '../interfaces/UserInput';
@@ -17,11 +18,14 @@ class UpdateUser {
         return Left.create(userError);
       }
 
-      const user = toDomain(userInput);
-      user.setId(id);
+      const user = toDomain({ ...userInput, id });
       const updatedUser = await this.userRepository.update(user).then(fromDomain);
       return Right.create(updatedUser);
     } catch (err) {
+      if (err instanceof GenericUserError) {
+        return Left.create(err);
+      }
+
       const userError = new UserConflictError(id);
       return Left.create(userError);
     }

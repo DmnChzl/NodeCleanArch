@@ -27,6 +27,7 @@ class HttpProvider {
       console.log(`Server Is Runnin' On Port ${port}`);
     });
   }
+
   stop() {
     this.server.close(() => {
       console.log('Server Is Shutting Down...');

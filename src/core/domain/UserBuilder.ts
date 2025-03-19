@@ -1,3 +1,5 @@
+import EmailAddress from '../value-objects/EmailAddress';
+import UserName from '../value-objects/UserName';
 import User from './User';
 
 class UserBuilder {
@@ -34,7 +36,12 @@ class UserBuilder {
   }
 
   build(): User {
-    return new User(this._id, this._firstName, this._lastName, this._email);
+    return new User(
+      this._id,
+      new UserName(this._firstName),
+      new UserName(this._lastName),
+      new EmailAddress(this._email)
+    );
   }
 }
 

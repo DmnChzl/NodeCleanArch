@@ -1,10 +1,13 @@
+import type EmailAddress from '../value-objects/EmailAddress';
+import type UserName from '../value-objects/UserName';
+
 class User {
   private _id: string;
-  private _firstName: string;
-  private _lastName: string;
-  private _email: string;
+  private _firstName: UserName;
+  private _lastName: UserName;
+  private _email: EmailAddress;
 
-  constructor(id: string, firstName: string, lastName: string, email: string) {
+  constructor(id: string, firstName: UserName, lastName: UserName, email: EmailAddress) {
     this._id = id;
     this._firstName = firstName;
     this._lastName = lastName;
@@ -15,32 +18,16 @@ class User {
     return this._id;
   }
 
-  setId(id: string) {
-    this._id = id;
-  }
-
   getFirstName(): string {
-    return this._firstName;
-  }
-
-  setFirstName(firstName: string) {
-    this._firstName = firstName;
+    return this._firstName.value;
   }
 
   getLastName(): string {
-    return this._lastName;
-  }
-
-  setLastName(lastName: string) {
-    this._lastName = lastName;
+    return this._lastName.value;
   }
 
   getEmail(): string {
-    return this._email;
-  }
-
-  setEmail(email: string) {
-    this._email = email;
+    return this._email.value;
   }
 
   toString(): string {

@@ -8,18 +8,7 @@ export interface UserEntity {
   email: string;
 }
 
-/*
-type ToTuple<T> = { [K in keyof T]: T[K] } extends { [K in keyof T]: infer U } ? U[] : unknown[];
-
-export const toEntity = (user: User): ToTuple<UserEntity> => [
-  user.getId(),
-  user.getFirstName(),
-  user.getLastName(),
-  user.getEmail()
-];
-*/
-
-export const toEntity = (user: User): string[] => [
+export const toEntity = (user: User): [string, string, string, string] => [
   user.getId(),
   user.getFirstName(),
   user.getLastName(),

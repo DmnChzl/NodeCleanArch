@@ -5,12 +5,13 @@ import GetAllUsers from '@/core/use-cases/GetAllUsers';
 import GetOneUser from '@/core/use-cases/GetOneUser';
 import UpdateUser from '@/core/use-cases/UpdateUser';
 import ControllerAdvice from '../exceptions/ControllerAdvice';
+import { StatusError } from '../exceptions/StatusError';
 import type { ApplicationRequest } from '../providers/ApplicationRequest';
 import type { ApplicationResponse } from '../providers/ApplicationResponse';
 import UserRouter from '../routes/UserRouter';
 import { bodyParser } from '../utils/index';
 
-class UserController {
+class UserController extends ControllerAdvice {
   private getAllUsers: GetAllUsers;
   private getOneUser: GetOneUser;
   private createUser: CreateUser;
@@ -24,6 +25,8 @@ class UserController {
     updateUser: UpdateUser,
     deleteUser: DeleteUser
   ) {
+    super();
+
     this.getAllUsers = getAllUsers;
     this.getOneUser = getOneUser;
     this.createUser = createUser;
@@ -47,18 +50,17 @@ class UserController {
     const matches = url.pathname.match(pathNameWithId);
 
     if (!matches) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = 400;
-      response.end(JSON.stringify({ message: `Cannot Get ${UserRouter.PATHNAME}` }));
-      return;
+      const handleError = this.exceptionHandler(request, response);
+      const statusError = new StatusError(`Cannot Get ${UserRouter.PATHNAME}`, 400);
+      return handleError(statusError);
     }
 
     const [_input, id] = matches;
     const result = await this.getOneUser.execute(id);
 
     if (result.isLeft()) {
-      const errorHandler = ControllerAdvice.handleException(request, response);
-      return errorHandler(result.error);
+      const handleError = this.exceptionHandler(request, response);
+      return handleError(result.error);
     }
 
     response.setHeader('Content-Type', 'application/json');
@@ -72,8 +74,8 @@ class UserController {
     const result = await this.createUser.execute(body);
 
     if (result.isLeft()) {
-      const errorHandler = ControllerAdvice.handleException(request, response);
-      return errorHandler(result.error);
+      const handleError = this.exceptionHandler(request, response);
+      return handleError(result.error);
     }
 
     response.setHeader('Content-Type', 'application/json');
@@ -90,10 +92,9 @@ class UserController {
     const matches = url.pathname.match(pathNameWithId);
 
     if (!matches) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = 400;
-      response.end(JSON.stringify({ message: `Cannot Get ${UserRouter.PATHNAME}` }));
-      return;
+      const handleError = this.exceptionHandler(request, response);
+      const statusError = new StatusError(`Cannot Get ${UserRouter.PATHNAME}`, 400);
+      return handleError(statusError);
     }
 
     const [_input, id] = matches;
@@ -101,8 +102,8 @@ class UserController {
     const result = await this.updateUser.execute(id, body);
 
     if (result.isLeft()) {
-      const errorHandler = ControllerAdvice.handleException(request, response);
-      return errorHandler(result.error);
+      const handleError = this.exceptionHandler(request, response);
+      return handleError(result.error);
     }
 
     response.statusCode = 200;
@@ -118,18 +119,17 @@ class UserController {
     const matches = url.pathname.match(pathNameWithId);
 
     if (!matches) {
-      response.setHeader('Content-Type', 'application/json');
-      response.statusCode = 400;
-      response.end(JSON.stringify({ message: `Cannot Get ${UserRouter.PATHNAME}` }));
-      return;
+      const handleError = this.exceptionHandler(request, response);
+      const statusError = new StatusError(`Cannot Get ${UserRouter.PATHNAME}`, 400);
+      return handleError(statusError);
     }
 
     const [_input, id] = matches;
     const result = await this.deleteUser.execute(id);
 
     if (result.isLeft()) {
-      const errorHandler = ControllerAdvice.handleException(request, response);
-      return errorHandler(result.error);
+      const handleError = this.exceptionHandler(request, response);
+      return handleError(result.error);
     }
 
     response.statusCode = 204;

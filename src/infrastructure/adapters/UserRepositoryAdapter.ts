@@ -1,6 +1,6 @@
 import User from '@/core/domain/User';
 import type { UserRepository } from '@/core/interfaces/UserRepositoryPort';
-import { fromEntity } from '../persistence/UserEntity';
+import { fromEntity, toEntity } from '../persistence/UserEntity';
 import type UserManagement from '../persistence/UserManagement';
 
 class UserRepositoryAdapter implements UserRepository {
@@ -17,12 +17,12 @@ class UserRepositoryAdapter implements UserRepository {
   }
 
   async create(user: User): Promise<User> {
-    this.userPersistance.createUser(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+    this.userPersistance.createUser(...toEntity(user));
     return user;
   }
 
   async update(user: User): Promise<User> {
-    this.userPersistance.updateUserById(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+    this.userPersistance.updateUserById(...toEntity(user));
     return user;
   }
 

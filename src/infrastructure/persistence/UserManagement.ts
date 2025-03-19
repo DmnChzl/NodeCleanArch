@@ -1,5 +1,5 @@
 import type { DatabaseSync } from 'node:sqlite';
-import SqlManager from './SqlManager';
+import SqlManager from '../providers/SqlManager';
 import type { UserEntity } from './UserEntity';
 import {
   CREATE_TABLE_USERS,

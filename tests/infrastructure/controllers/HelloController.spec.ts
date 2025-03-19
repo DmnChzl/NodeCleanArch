@@ -4,20 +4,21 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('HelloController', () => {
   let ctrl: HelloController;
-  let serverResponse: ServerResponse;
 
   beforeEach(() => {
     ctrl = new HelloController();
-    serverResponse = new ServerResponse({} as IncomingMessage);
   });
 
-  it('should setHeader', () => {
+  it('should write the header', () => {
+    const incomingMessage = {} as IncomingMessage;
+    const serverResponse = new ServerResponse(incomingMessage);
+
     const setHeaderMock = vi.fn();
     const endMock = vi.fn();
     serverResponse.setHeader = setHeaderMock;
     serverResponse.end = endMock;
 
-    ctrl.message({} as IncomingMessage, serverResponse);
+    ctrl.greeting(incomingMessage, serverResponse);
 
     expect(setHeaderMock).toHaveBeenCalledWith('Content-Type', 'application/json');
     expect(serverResponse.statusCode).toEqual(200);
