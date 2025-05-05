@@ -9,10 +9,10 @@ export interface UserEntity {
 }
 
 export const toEntity = (user: User): [string, string, string, string] => [
-  user.getId(),
-  user.getFirstName(),
-  user.getLastName(),
-  user.getEmail()
+  user.id,
+  user.firstName,
+  user.lastName,
+  user.email
 ];
 
 export const fromEntity = (user: UserEntity): User => {

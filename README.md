@@ -40,6 +40,61 @@ Preview:
 pnpm run preview
 ```
 
+## cURL
+
+Read All Users:
+
+```bash
+curl --request GET \
+  --url http://localhost:8080/api/users
+```
+
+Create New User:
+
+```bash
+curl --request POST \
+  --url http://localhost:8080/api/users \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@pm.me"
+}'
+```
+
+Read One User:
+
+> `:id` As Path Variable `string`
+
+```bash
+curl --request GET \
+  --url http://localhost:8080/api/users/:id
+```
+
+Update User:
+
+> `:id` As Path Variable `string`
+
+```bash
+curl --request PUT \
+  --url http://localhost:8080/api/users/:id \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@pm.me"
+}'
+```
+
+Delete User:
+
+> `:id` As Path Variable `string`
+
+```bash
+curl --request DELETE \
+  --url http://localhost:1234/api/users/:id
+```
+
 ## License
 
 ```

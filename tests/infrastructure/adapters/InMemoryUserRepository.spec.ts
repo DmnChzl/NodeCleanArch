@@ -17,7 +17,7 @@ describe('InMemoryUserRepository', () => {
 
   it('should find user by id', async () => {
     const user = await repository.findById('82p47nrr');
-    expect((user as User).getEmail()).toEqual('john.doe@pm.me');
+    expect((user as User).email).toEqual('john.doe@pm.me');
   });
 
   it('should returns null', async () => {

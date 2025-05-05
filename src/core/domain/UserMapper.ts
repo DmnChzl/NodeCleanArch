@@ -15,6 +15,6 @@ export const toDomain = (user: UserInputWithId): User => {
 };
 
 export const fromDomain = (user: User): UserOutput => {
-  const fullName = `${user.getFirstName()} ${user.getLastName()}`;
-  return { id: user.getId(), fullName, email: user.getEmail() };
+  const fullName = `${user.firstName} ${user.lastName}`;
+  return { id: user.id, fullName, email: user.email };
 };
